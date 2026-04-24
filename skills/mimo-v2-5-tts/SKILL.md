@@ -1,9 +1,9 @@
 ---
 name: mimo-v2-5-tts
-description: "MiMo V2.5 TTS 语音合成。使用小米 MiMo V2.5 TTS 系列模型生成语音。当需要将文字转为语音、发送语音消息、朗读内容、或用户要求「说出来」「语音回复」时激活此 skill。支持预置音色、音色设计、音色克隆三种模式，所有模式均支持自然语言控制（导演模式）和语气、情绪、方言的风格标签控制，预置音色支持唱歌。"
+description: "MiMo V2.5 TTS 语音合成。使用小米 MiMo V2.5 TTS 系列模型生成语音。当需要将文字转为语音、发送语音消息、朗读内容、或用户要求「说出来」「语音回复」时激活此 skill。支持预置音色、音色设计、音色克隆三种模式，支持自然语言控制、导演模式，支持语气、情绪、方言的风格标签控制，预置音色支持唱歌。"
 license: MIT
 metadata:
-  version: 0.1.1
+  version: 0.1.2
 ---
 
 # MiMo V2.5 TTS
@@ -56,7 +56,7 @@ V2.5 系列提供三种模型，根据使用场景选择：
 | 苏打   | `苏打`   | 中文    | 男性   | 阳光少年      |
 | 白桦   | `白桦`   | 中文    | 男性   | 成熟男声      |
 | Mia    | `Mia`    | English | Female | Lively girl   |
-| Chloe  | `Chloe`  | English | Female | Witty Grace   |
+| Chloe  | `Chloe`  | English | Female | Sweet Dreamy  |
 | Milo   | `Milo`   | English | Male   | Sunny boy     |
 | Dean   | `Dean`   | English | Male   | Steady Gentle |
 
@@ -64,7 +64,7 @@ V2.5 系列提供三种模型，根据使用场景选择：
 
 所有模型都支持自然语言控制。
 
-通过自然语言描述让模型理解并生成对应风格的语音。所有模型均可通过 `--context` 参数传入自然语言控制指令：`mimo-v2.5-tts` 和 `mimo-v2.5-tts-voiceclone` 可用于调整指定音色下的语气情绪等风格；`mimo-v2.5-tts-voicedesign` 则可同时控制音色和风格。
+通过自然语言描述让模型理解并生成对应风格的语音。所有模型均可通过 `--context` 参数传入自然语言控制指令：`mimo-v2.5-tts` 和 `mimo-v2.5-tts-voiceclone` 可用于调整指定音色下的语气情绪等风格；`mimo-v2.5-tts-voicedesign` 则通过这个选项同时控制音色和风格。
 
 **能力特点：**
 
@@ -107,7 +107,7 @@ V2.5 系列提供三种模型，根据使用场景选择：
 
 ## 音频标签控制
 
-所有模型都支持音频标签控制。
+`mimo-v2.5-tts` 和 `mimo-v2.5-tts-voiceclone` 支持音频标签控制。`mimo-v2.5-tts-voicedesign` 暂不支持，如需控制风格请通过 `--context` 写更详细的描述。
 
 在文本任意位置用括号描述语气、情绪或能发出声音的动作，实现句内切换。括号内必须是声音相关内容（如语气、情绪、叹气、打哈欠、咳嗽），不能是身体动作（如转身、坐下、挥手）。
 
@@ -170,8 +170,8 @@ It's just so stupid! (sobbing) We spent all that money on the cake and the dog j
 **硬约束：**
 
 - 一到两句话，白描式，不分段、不列条。
-- 不写场景（❌"在发布会""值夜班"）。
-- 不写动作（❌"她走上舞台"）。
+- 不写场景（"在发布会""值夜班"）。
+- 不写动作（"她走上舞台"）。
 - 不用真实演员或 IP 角色名（版权 + 泛化差）。
 - 默认普通话或英文；方言仅在明确需要时加。
 

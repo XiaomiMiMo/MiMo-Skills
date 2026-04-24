@@ -13,7 +13,7 @@
 
 | Skill | Description | License |
 |-------|-------------|---------|
-| `mimo-v2-5-tts` | MiMo V2.5 TTS voice synthesis. Supports preset voices, voice design, voice cloning, emotion styles, dialects, and singing. All modes support natural language control (Director Mode) and audio tag control. | MIT |
+| `mimo-v2-5-tts` | MiMo V2.5 TTS voice synthesis. Supports preset voices, voice design, voice cloning, emotion styles, dialects, and singing. Supports natural language control, Director Mode, and audio tag control. | MIT |
 
 ## Installation
 
