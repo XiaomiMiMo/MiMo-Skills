@@ -3,7 +3,7 @@ name: mimo-v2-5-tts
 description: "MiMo V2.5 TTS 语音合成。使用小米 MiMo V2.5 TTS 系列模型生成语音。当需要将文字转为语音、发送语音消息、朗读内容、或用户要求「说出来」「语音回复」时激活此 skill。支持预置音色、音色设计、音色克隆三种模式，支持自然语言控制、导演模式，支持语气、情绪、方言的风格标签控制，预置音色支持唱歌。"
 license: MIT
 metadata:
-  version: 0.1.2
+  version: 0.2.0
 ---
 
 # MiMo V2.5 TTS
@@ -13,6 +13,23 @@ metadata:
 脚本目录：`$SKILLS_PATH/mimo-v2-5-tts/scripts/`
 
 > **`$SKILLS_PATH` 说明：** skills 目录路径，因部署环境而异。
+
+## 按需加载
+
+**脚本用法文档** — 确定要使用哪个脚本后，读取对应文档获取完整参数说明和示例：
+
+| 脚本                      | 文档路径                                                           |
+| ------------------------- | ------------------------------------------------------------------ |
+| `mimo_tts.py`             | `$SKILLS_PATH/mimo-v2-5-tts/scripts-docs/mimo_tts.md`             |
+| `mimo_tts_voicedesign.py` | `$SKILLS_PATH/mimo-v2-5-tts/scripts-docs/mimo_tts_voicedesign.md` |
+| `mimo_tts_voiceclone.py`  | `$SKILLS_PATH/mimo-v2-5-tts/scripts-docs/mimo_tts_voiceclone.md`  |
+
+**平台发送文档** — 需要将语音发送到某个平台时，读取对应平台文档：
+
+| 平台   | 文档路径                                                    |
+| ------ | ----------------------------------------------------------- |
+| 飞书   | `$SKILLS_PATH/mimo-v2-5-tts/platforms/feishu.md`           |
+| OpenClaw QQ Bot | `$SKILLS_PATH/mimo-v2-5-tts/platforms/openclaw-qqbot.md`   |
 
 ## 模型选择
 
@@ -230,160 +247,3 @@ It's just so stupid! (sobbing) We spent all that money on the cake and the dog j
 [轻声]来，躺好。[停顿]奶奶给你讲个故事啊。[长停顿]从前啊，山脚下有一间小木屋…[拖音]住着一只小兔子。[叹气]这只兔子呀，特别贪玩，每天太阳一出来就往外跑。[停顿]结果有一天——[强调]下雨了。[低语]它迷路了，怎么都找不到回家的路…
 ```
 
----
-
-## Python 脚本用法
-
-三个模型分别对应三个脚本，根据需求选择：
-
-| 脚本                      | 模型                        | 用途             |
-| ------------------------- | --------------------------- | ---------------- |
-| `mimo_tts.py`             | `mimo-v2.5-tts`             | 预置音色语音合成 |
-| `mimo_tts_voicedesign.py` | `mimo-v2.5-tts-voicedesign` | 文本描述定制音色 |
-| `mimo_tts_voiceclone.py`  | `mimo-v2.5-tts-voiceclone`  | 音频样本复刻音色 |
-
-### 预置音色语音合成（mimo_tts.py）
-
-```bash
-python3 $SKILLS_PATH/mimo-v2-5-tts/scripts/mimo_tts.py \
-  --text "你好，今天天气真不错。" \
-  --voice "冰糖"
-```
-
-### 预置音色 + 自然语言风格控制
-
-```bash
-python3 $SKILLS_PATH/mimo-v2-5-tts/scripts/mimo_tts.py \
-  --context "用温柔的语气，语速稍慢" \
-  --text "没关系，慢慢来，我等你。" \
-  --voice "冰糖" \
-  --output tmp/mimo-v2.5-tts/comfort.wav
-```
-
-### 预置音色 + 音频标签控制
-
-```bash
-python3 $SKILLS_PATH/mimo-v2-5-tts/scripts/mimo_tts.py \
-  --text "（紧张，深呼吸）呼……冷静，冷静。不就是一个面试吗……（小声）哎呀，领带歪没歪？" \
-  --voice "冰糖" \
-  --output tmp/mimo-v2.5-tts/interview.wav
-```
-
-### 音色设计（mimo_tts_voicedesign.py）
-
-```bash
-python3 $SKILLS_PATH/mimo-v2-5-tts/scripts/mimo_tts_voicedesign.py \
-  --context "Give me a young male tone." \
-  --text "Yes, I had a sandwich." \
-  --output tmp/mimo-v2.5-tts/voicedesign.wav
-```
-
-> **技巧：** 可以将 Voice Design 生成的音频保存下来，后续作为 `mimo_tts_voiceclone.py` 的 `--voice-file` 输入，实现「设计 → 克隆」的工作流：先用文本描述（`--context`）生成满意的音色，再用该音频作为样本克隆到其他文本。克隆时也可通过 `--context` 添加导演模式指令。
-
-### 音色克隆（mimo_tts_voiceclone.py）
-
-> **注意：** 音色样本 Base64 编码不超过 10 MB，仅支持 mp3 和 wav 格式。
-
-```bash
-python3 $SKILLS_PATH/mimo-v2-5-tts/scripts/mimo_tts_voiceclone.py \
-  --voice-file voice.mp3 \
-  --text "Yes, I had a sandwich." \
-  --output tmp/mimo-v2.5-tts/voiceclone.wav
-```
-
-### 音色克隆 + 导演模式
-
-```bash
-python3 $SKILLS_PATH/mimo-v2-5-tts/scripts/mimo_tts_voiceclone.py \
-  --voice-file voice.mp3 \
-  --context "用温柔的语气，语速稍慢" \
-  --text "没关系，慢慢来，我等你。" \
-  --output tmp/mimo-v2.5-tts/voiceclone_director.wav
-```
-
-### 唱歌
-
-> **注意：** 唱歌歌词要完整，残缺歌词会导致跑调、效果差。
-
-```bash
-python3 $SKILLS_PATH/mimo-v2-5-tts/scripts/mimo_tts.py \
-  --text "(唱歌)原谅我这一生不羁放纵爱自由，也会怕有一天会跌倒，Oh no。背弃了理想，谁人都可以，哪会怕有一天只你共我。" \
-  --voice "冰糖" \
-  --output tmp/mimo-v2.5-tts/singing.wav
-```
-
-### 英文 + 音频标签
-
-```bash
-python3 $SKILLS_PATH/mimo-v2-5-tts/scripts/mimo_tts.py \
-  --text "I just... (sighs deeply) I don't know anymore. (suddenly firm) But I won't give up!" \
-  --voice "Mia" \
-  --output tmp/mimo-v2.5-tts/english.wav
-```
-
-### 长文本处理
-
-V2.5 对长文本的支持较好，**建议几乎所有场景都一次性生成**，无需手动分段。仅当文本超过 **2500 字**时，才需要考虑分段合成再拼接。
-
-分段合成方法：按句号/段落自然切分，每段独立生成 wav，再用 ffmpeg 拼接：
-
-```bash
-# 创建文件列表
-echo "file '/tmp/mimo-v2.5-tts/part1.wav'" > /tmp/mimo-v2.5-tts/list.txt
-echo "file '/tmp/mimo-v2.5-tts/part2.wav'" >> /tmp/mimo-v2.5-tts/list.txt
-
-# 拼接
-ffmpeg -y -f concat -safe 0 -i /tmp/mimo-v2.5-tts/list.txt -c copy /tmp/mimo-v2.5-tts/combined.wav
-```
-
----
-
-## 飞书语音消息发送
-
-> **注意：** 仅当用户需要将 TTS 生成的语音发送到飞书时才需要使用此功能。
-
-将 TTS 生成的 WAV 发送到飞书，一条命令完成：生成 → 转码 → 上传 → 发送。
-
-> **为什么不用 message tool：** 飞书语音消息需要调用 `/im/v1/messages` 接口（`msg_type: audio`），且需先上传音频获取 `file_key`。很多工具的 message tool（`asVoice: true`）在飞书 channel 上未实现此逻辑，会将音频当作普通附件发送（用户看到的是文件而非语音条）。`feishu_send_audio.sh` 完成了完整的上传 + 发送流程，不可替换为 message tool。
-
-### 环境依赖
-
-| 环境变量            | 来源         | 说明            |
-| ------------------- | ------------ | --------------- |
-| `FEISHU_APP_ID`     | 飞书开放平台 | 应用 App ID     |
-| `FEISHU_APP_SECRET` | 飞书开放平台 | 应用 App Secret |
-
-| 依赖     | 说明                      | 必需 |
-| -------- | ------------------------- | ---- |
-| `ffmpeg` | WAV 转 Opus、获取音频时长 | 是   |
-| `curl`   | 调用飞书 API              | 是   |
-
-### 用法
-
-#### 私聊发送（open_id）
-
-```bash
-# 1. 生成语音
-python3 $SKILLS_PATH/mimo-v2-5-tts/scripts/mimo_tts.py \
-  --text "好的，马上就好！" \
-  --voice "冰糖" \
-  --output /tmp/mimo-v2.5-tts/voice.wav
-
-# 2. 发送到飞书私聊（receive_id_type 为 open_id，receive_id 为用户 ID）
-bash $SKILLS_PATH/mimo-v2-5-tts/scripts/feishu_send_audio.sh /tmp/mimo-v2.5-tts/voice.wav open_id ou_xxxxxx
-```
-
-#### 群聊发送（chat_id）
-
-```bash
-# 1. 生成语音
-python3 $SKILLS_PATH/mimo-v2-5-tts/scripts/mimo_tts.py \
-  --text "大家好，今天天气真不错！" \
-  --voice "冰糖" \
-  --output /tmp/mimo-v2.5-tts/voice.wav
-
-# 2. 发送到飞书群聊（receive_id_type 为 chat_id，receive_id 为群 ID）
-bash $SKILLS_PATH/mimo-v2-5-tts/scripts/feishu_send_audio.sh /tmp/mimo-v2.5-tts/voice.wav chat_id oc_xxxxxx
-```
-
-`feishu_send_audio.sh` 内部流程：`wav → opus (ffmpeg)` → `获取 tenant_access_token` → `上传音频文件` → `发送 audio 消息`。
